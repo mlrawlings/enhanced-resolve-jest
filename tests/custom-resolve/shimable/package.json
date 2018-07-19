@@ -1,0 +1,5 @@
+{
+  "custom-alias": {
+    "./other.ts": "./other-shim.ts"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "browser": {
+    "./other.ts": "./other-shim.ts"
+  }
+}
