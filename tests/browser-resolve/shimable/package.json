@@ -1,5 +1,6 @@
 {
   "browser": {
-    "./other.ts": "./other-shim.ts"
+    "./other.ts": "./other-shim.ts",
+    "./omit.ts": false
   }
 }

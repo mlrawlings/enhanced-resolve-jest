@@ -1,5 +1,5 @@
 import { x } from "./other";
 
-test("works", () => {
+test("resolves node files", () => {
   expect(x).toBe(1);
 });

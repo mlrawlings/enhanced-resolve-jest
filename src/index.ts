@@ -1,6 +1,8 @@
 import fs from "fs";
 import { ResolverFactory } from "enhanced-resolve";
 
+const EMPTY_FILE = require.resolve("./empty");
+
 type CreateResolver = typeof ResolverFactory.createResolver;
 type Resolver = ReturnType<CreateResolver>;
 type ResolverOpts = Parameters<CreateResolver>[0];
@@ -30,7 +32,15 @@ export function create(getConfig: (opts: getConfigOpts) => ResolverOpts) {
         useSyncFileSystemCalls: true
       }));
 
-    return resolver.resolveSync({}, jestOpts.basedir, modulePath);
+    const resolved = resolver.resolveSync({}, jestOpts.basedir, modulePath) as
+      | string
+      | false;
+
+    if (resolved === false) {
+      return EMPTY_FILE;
+    }
+
+    return resolved;
   };
 }
 

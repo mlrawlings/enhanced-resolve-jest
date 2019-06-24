@@ -1,5 +1,5 @@
 import { x } from "./shimable/other";
 
-test("works", () => {
+test("resolves custom files", () => {
   expect(x).toBe(1);
 });
