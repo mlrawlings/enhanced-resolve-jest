@@ -52,6 +52,7 @@
   },
   "types": "dist/index.d.ts",
   "dependencies": {
-    "enhanced-resolve": "^4.1.0"
+    "enhanced-resolve": "^4.1.0",
+    "tslib": "^1.10.0"
   }
 }
