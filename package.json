@@ -1,7 +1,7 @@
 {
   "name": "enhanced-resolve-jest",
   "description": "Resolver for Jest which uses the enhanced-resolve module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Dylan Piercey <dpiercey@ebay.com>",
   "bugs": "https://github.com/mlrawlings/enhanced-resolve-jest/issues",
   "devDependencies": {
