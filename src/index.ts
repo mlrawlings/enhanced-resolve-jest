@@ -1,5 +1,5 @@
 import fs from "fs";
-import { ResolverFactory } from "enhanced-resolve";
+import { ResolverFactory, CachedInputFileSystem } from "enhanced-resolve";
 
 const EMPTY_FILE = require.resolve("./empty");
 
@@ -14,21 +14,33 @@ type getConfigOpts = Pick<
   "browser" | "extensions" | "moduleDirectory"
 >;
 
+const cachedInputFileSystem = new CachedInputFileSystem(fs as any, 60000);
+let queuedPurge = false;
 export default module.exports = exports = create(getDefaultConfig);
 
 export function create(getConfig: (opts: getConfigOpts) => ResolverOpts) {
   const resolverCache: { [x: string]: Resolver } = Object.create(null);
   return (modulePath: string, jestOpts: JestResolveOpts) => {
+    if (!queuedPurge) {
+      queuedPurge = true;
+      setImmediate(() => {
+        cachedInputFileSystem.purge();
+        queuedPurge = false;
+      });
+    }
+
     const configOpts = {
       browser: jestOpts.browser,
       extensions: jestOpts.extensions,
       moduleDirectory: jestOpts.moduleDirectory
     };
-    const cacheKey = JSON.stringify(configOpts);
+    const userConfig = getConfig(configOpts);
+    const cacheKey = `${configOpts.browser}\0${jestOpts.extensions}\0${configOpts.moduleDirectory}`;
     const resolver =
       resolverCache[cacheKey] ||
       (resolverCache[cacheKey] = ResolverFactory.createResolver({
-        ...getConfig(configOpts),
+        fileSystem: cachedInputFileSystem as any,
+        ...userConfig,
         useSyncFileSystemCalls: true
       }));
 
